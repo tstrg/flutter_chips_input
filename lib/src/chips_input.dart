@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'suggestions_box_controller.dart';
 import 'text_cursor.dart';
@@ -290,13 +290,13 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         final renderBox = context.findRenderObject() as RenderBox;
         await Scrollable.of(context)
-            ?.position
+            .position
             .ensureVisible(renderBox)
             .then((_) async {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _suggestionsBoxController.overlayEntry?.markNeedsBuild();
           });
-        });                              
+        });
       });
     });
   }
@@ -360,11 +360,12 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
             composing: TextRange.empty,
           ));
     }
-    if( !kIsWeb) {
-        _closeInputConnectionIfNeeded(); //Hack for #34 (https://github.com/danvick/flutter_chips_input/issues/34#issuecomment-684505282). TODO: Find permanent fix
+    if (!kIsWeb) {
+      _closeInputConnectionIfNeeded(); //Hack for #34 (https://github.com/danvick/flutter_chips_input/issues/34#issuecomment-684505282). TODO: Find permanent fix
     }
     _textInputConnection ??= TextInput.attach(this, textInputConfiguration);
-    if(_textInputConnection?.attached ?? false) _textInputConnection?.setEditingState(_value);
+    if (_textInputConnection?.attached ?? false)
+      _textInputConnection?.setEditingState(_value);
   }
 
   @override
@@ -445,7 +446,7 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
                 maxLines: 1,
                 overflow: widget.textOverflow,
                 style: widget.textStyle ??
-                    theme.textTheme.subtitle1!.copyWith(height: 1.5),
+                    theme.textTheme.titleMedium!.copyWith(height: 1.5),
               ),
             ),
             Flexible(
@@ -502,4 +503,15 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
 
   @override
   void removeTextPlaceholder() {}
+
+  @override
+  void didChangeInputControl(
+      TextInputControl? oldControl, TextInputControl? newControl) {
+    // TODO: implement didChangeInputControl
+  }
+
+  @override
+  void performSelector(String selectorName) {
+    // TODO: implement performSelector
+  }
 }
